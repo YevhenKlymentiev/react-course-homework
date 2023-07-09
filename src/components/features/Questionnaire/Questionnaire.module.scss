@@ -1,0 +1,27 @@
+.question {
+  text-align: center;
+  margin: 100px 0;
+}
+
+.answers {
+  display: flex;
+  justify-content: center;
+}
+
+.answerBtn {
+  min-width: 250px;
+  font-size: 20px;
+  line-height: 30px;
+  background-color: #FFF;
+  border: 1px solid #333;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+  margin: 0 20px;
+
+  &:disabled {
+    opacity: 0.5;
+    border: 1px solid #CCC;
+    cursor: default;
+  }
+}
