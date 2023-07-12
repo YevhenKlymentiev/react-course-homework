@@ -1,5 +1,6 @@
 import cx from 'classnames';
 
+import DarkThemeContext from 'contexts/darkTheme';
 import styles from './Answer.module.scss';
 
 function Answer(props) {
@@ -22,18 +23,23 @@ function Answer(props) {
   }
 
   return (
-    <button type="button"
-            className={cx(
-              styles.btn,
-              { [styles.btnCorrect]: isSelected && correctness,
-                [styles.btnIncorrect]: isSelected && !correctness
-              }
-            )}
-            disabled={isDisabled}
-            onClick={handleBtnClick}
-    >
-      { answerText }
-    </button>
+    <DarkThemeContext.Consumer>
+      { isDarkThemeActive => (
+        <button type="button"
+                className={cx(
+                  styles.btn,
+                  { [styles.btnDark]: isDarkThemeActive,
+                    [styles.btnCorrect]: isSelected && correctness,
+                    [styles.btnIncorrect]: isSelected && !correctness
+                  }
+                )}
+                disabled={isDisabled}
+                onClick={handleBtnClick}
+        >
+          { answerText }
+        </button>
+      )}
+    </DarkThemeContext.Consumer>
   );
 }
 

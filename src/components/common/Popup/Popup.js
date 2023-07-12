@@ -1,3 +1,5 @@
+import { createPortal } from 'react-dom';
+
 import { ReactComponent as CloseIcon } from 'assets/images/close.svg';
 import styles from './Popup.module.scss';
 
@@ -7,7 +9,8 @@ function Popup(props) {
     close
   } = props;
 
-  return (
+  const popupPlaceholder = document.getElementById('popupPlaceholder');
+  const elem = (
     <div className={styles.container}>
       <div className={styles.content}>
         { children }
@@ -15,6 +18,8 @@ function Popup(props) {
       </div>
     </div>
   );
+
+  return createPortal(elem, popupPlaceholder);
 }
 
 export default Popup;

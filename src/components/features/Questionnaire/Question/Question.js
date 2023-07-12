@@ -2,6 +2,7 @@ import { Component } from 'react';
 
 import Answers from './Answers/Answers';
 import ResultMessage from './ResultMessage/ResultMessage';
+import ManualAnswer from './ManualAnswer/ManualAnswer';
 import RESULT_STATUS from 'constants/resultStatus';
 import styles from './Question.module.scss';
 
@@ -13,7 +14,8 @@ class Question extends Component {
 
     this.state = {
       resultStatus: null,
-      selectedAnswer: null
+      selectedAnswer: null,
+      correctAnswer: props.data.answers.find(curr => curr.correctness)
     };
   }
 
@@ -36,6 +38,14 @@ class Question extends Component {
     });
   }
 
+  submitManualAnswer = (manualAnswerText) => {
+    const { correctAnswer } = this.state;
+
+    if (manualAnswerText.toLowerCase() === correctAnswer.answerText.toLowerCase()) {
+      this.setSelectedAnswer(correctAnswer);
+    }
+  }
+
   render() {
     const {
       data
@@ -54,8 +64,9 @@ class Question extends Component {
                  selectedAnswer={selectedAnswer}
                  setSelectedAnswer={this.setSelectedAnswer}
         />
-        { resultStatus &&
-          <ResultMessage resultStatus={resultStatus} />
+        { resultStatus
+          ? <ResultMessage resultStatus={resultStatus} />
+          : <ManualAnswer handleSubmit={this.submitManualAnswer} />
         }
       </div>
     );
