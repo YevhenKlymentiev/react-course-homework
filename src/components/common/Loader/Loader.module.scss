@@ -1,0 +1,17 @@
+@import 'src/styles/animations';
+
+.spinner {
+  display: block;
+  width: 200px;
+  height: 200px;
+  animation: rotate360 4s linear infinite;
+  margin-top: 120px;
+
+  circle {
+    fill: lightgray;
+  }
+
+  g {
+    stroke: lightgray;
+  }
+}
