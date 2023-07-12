@@ -1,14 +1,5 @@
-.question {
-  text-align: center;
-  margin: 100px 0;
-}
-
-.answers {
-  display: flex;
-  justify-content: center;
-}
-
-.answerBtn {
+.btn {
+  display: inline-block;
   min-width: 250px;
   font-size: 20px;
   line-height: 30px;
@@ -17,11 +8,21 @@
   border-radius: 5px;
   cursor: pointer;
   padding: 10px;
-  margin: 0 20px;
+  margin: 20px;
 
   &:disabled {
     opacity: 0.5;
     border: 1px solid #CCC;
     cursor: default;
+  }
+
+  &Correct {
+    color: #FFF;
+    background-color: green;
+  }
+
+  &Incorrect {
+    color: #FFF;
+    background-color: red;
   }
 }

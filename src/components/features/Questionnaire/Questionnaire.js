@@ -1,43 +1,49 @@
 import { Component } from 'react';
 
+import Error from 'components/common/Error/Error';
+import Loader from 'components/common/Loader/Loader';
+import Question from './Question/Question';
+import fakeFetchData from 'helpers/client';
 import data from './data.mock';
-import styles from './Questionnaire.module.scss';
 
 class Questionnaire extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isAnswerBtnsDisabled: false };
+    this.state = {
+      error: null,
+      question: null,
+      isLoading: false
+    };
   }
 
   componentDidMount() {
-    this.answerBttnsDisableTimeoutId = setTimeout(() => {
-      this.setState({ isAnswerBtnsDisabled: true });
-    }, 10_000);
+    this.fetchData();
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.answerBttnsDisableTimeoutId);
+  fetchData() {
+    this.setState({ isLoading: true });
+
+    fakeFetchData(data)
+      .then(res => {
+        this.setState({ question: res, isLoading: false });
+      })
+      .catch(err => {
+        this.setState({ error: err, isLoading: false });
+      });
   }
 
   render() {
     const {
-      isAnswerBtnsDisabled
+      error,
+      question,
+      isLoading
     } = this.state;
 
-    return (
-      <div>
-        <h1 className={styles.question}>{ data.questionText }</h1>
-        <div className={styles.answers}>
-          <button type="button" className={styles.answerBtn} disabled={isAnswerBtnsDisabled}>
-            { data.firstAnswerText }
-          </button>
-          <button type="button" className={styles.answerBtn} disabled={isAnswerBtnsDisabled}>
-            { data.secondAnswerText }
-          </button>
-        </div>
-      </div>
-    );
+    if (error) return <Error errorStatus={error.status} />;
+    if (isLoading || !question) return <Loader />;
+
+    return <Question data={question} />;
   }
 }
 
