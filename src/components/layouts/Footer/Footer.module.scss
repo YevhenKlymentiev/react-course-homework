@@ -10,3 +10,15 @@
   height: 24px;
   margin-right: 10px;
 }
+
+.openGalleryBtn {
+  background-color: #f4f4f4;
+  border: 1px solid #333;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin-left: auto;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
