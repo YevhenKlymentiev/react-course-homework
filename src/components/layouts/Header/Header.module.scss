@@ -12,6 +12,46 @@
   margin-right: 10px;
 }
 
+.controls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.toggleThemeBtn {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background-color: #DEDEDE;
+  border: none;
+  border-radius: 50px;
+  transition: background-color 0.14s;
+  margin-right: 20px;
+  cursor: pointer;
+
+  &:before {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background-color: #777;
+    border-radius: 50%;
+    transition: all 0.14s;
+  }
+
+  &Active {
+    background-color: #777;
+
+    &:before {
+      background-color: #DEDEDE;
+      transform: translateX(100%);
+    }
+  }
+}
+
 .resetBtn {
   color: #FFF;
   text-transform: uppercase;
@@ -21,5 +61,4 @@
   border: none;
   cursor: pointer;
   padding: 10px 20px;
-  margin-left: auto;
 }

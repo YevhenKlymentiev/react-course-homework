@@ -3,6 +3,7 @@ import { Component } from 'react';
 import Header from 'components/layouts/Header/Header';
 import Footer from 'components/layouts/Footer/Footer';
 import Questionnaire from 'components/features/Questionnaire/Questionnaire';
+import DarkThemeContext from 'contexts/darkTheme';
 import styles from './App.module.scss';
 
 class App extends Component {
@@ -10,8 +11,13 @@ class App extends Component {
     super(props);
 
     this.state = {
+      isDarkThemeActive: false,
       questionnaireResetIndicator: 0
     };
+  }
+
+  toggleDarkTheme = () => {
+    this.setState(prevState => ({ isDarkThemeActive: !prevState.isDarkThemeActive }));
   }
 
   resetQuestionnaire = () => {
@@ -20,17 +26,23 @@ class App extends Component {
 
   render() {
     const {
+      isDarkThemeActive,
       questionnaireResetIndicator
     } = this.state;
 
     return (
-      <div className={styles.container}>
-        <Header resetQuestionnaire={this.resetQuestionnaire} />
-        <div className={styles.content}>
-          <Questionnaire resetIndicator={questionnaireResetIndicator} />
+      <DarkThemeContext.Provider value={isDarkThemeActive}>
+        <div className={styles.container}>
+          <Header resetQuestionnaire={this.resetQuestionnaire}
+                  isDarkThemeActive={isDarkThemeActive}
+                  toggleDarkTheme={this.toggleDarkTheme}
+          />
+          <div className={styles.content}>
+            <Questionnaire resetIndicator={questionnaireResetIndicator} />
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      </DarkThemeContext.Provider>
     );
   }
 }
