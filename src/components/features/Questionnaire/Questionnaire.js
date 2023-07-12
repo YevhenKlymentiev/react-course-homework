@@ -21,8 +21,14 @@ class Questionnaire extends Component {
     this.fetchData();
   }
 
+  componentDidUpdate(prevProps) {
+    if ((prevProps.resetIndicator !== this.props.resetIndicator) && !this.state.isLoading) {
+      this.fetchData();
+    }
+  }
+
   fetchData() {
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, error: null });
 
     fakeFetchData(data)
       .then(res => {
