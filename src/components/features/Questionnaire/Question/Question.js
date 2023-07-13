@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { useOutletContext } from 'react-router-dom';
 
 import Answers from './Answers/Answers';
 import ResultMessage from './ResultMessage/ResultMessage';
@@ -6,31 +7,44 @@ import ManualAnswer from './ManualAnswer/ManualAnswer';
 import RESULT_STATUS from 'constants/resultStatus';
 import styles from './Question.module.scss';
 
-function Question(props) {
-  const { data } = props;
+function Question() {
+  const nextQuestionDelay = 5_000;
   const availableTimeForAnswer = 10_000;
 
-  const [resultStatus, setResultStatus] = useState(null);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const {
+    questionData: { id, answers, questionText, resultStatus, selectedAnswer },
+    setQuestionResult,
+    navToNextQuestion
+  } = useOutletContext();
 
-  const correctAnswerRef = useRef(data.answers.find(curr => curr.correctness));
+  const correctAnswerRef = useRef(answers.find(curr => curr.correctness));
+  const nextQuestionTimeoutIdRef = useRef(null);
   const answerTimeoutIdRef = useRef(null);
 
+  function navToNextQuestionWithDelay() {
+    nextQuestionTimeoutIdRef.current = setTimeout(navToNextQuestion, nextQuestionDelay);
+  }
+
   useEffect(() => {
-    answerTimeoutIdRef.current = setTimeout(() => {
-      setResultStatus(RESULT_STATUS.expired);
-    }, availableTimeForAnswer);
+    if (!resultStatus) {
+      answerTimeoutIdRef.current = setTimeout(() => {
+        setQuestionResult({ id, resultStatus: RESULT_STATUS.expired });
+        navToNextQuestionWithDelay();
+      }, availableTimeForAnswer);
+    }
 
     return () => {
+      clearTimeout(nextQuestionTimeoutIdRef.current);
       clearTimeout(answerTimeoutIdRef.current);
     };
   }, []);
 
-  function handleSelectedAnswer(answer) {
-    clearTimeout(answerTimeoutIdRef.current);
+  function handleSelectedAnswer(selectedAnswer) {
+    const resultStatus = selectedAnswer.correctness ? RESULT_STATUS.success : RESULT_STATUS.failure;
 
-    setSelectedAnswer(answer);
-    setResultStatus(answer.correctness ? RESULT_STATUS.success : RESULT_STATUS.failure);
+    clearTimeout(answerTimeoutIdRef.current);
+    setQuestionResult({ id, resultStatus, selectedAnswer });
+    navToNextQuestionWithDelay();
   }
 
   function submitManualAnswer(manualAnswerText) {
@@ -41,8 +55,8 @@ function Question(props) {
 
   return (
     <div>
-      <h1 className={styles.question}>{ data.questionText }</h1>
-      <Answers list={data.answers}
+      <h1 className={styles.question}>{ questionText }</h1>
+      <Answers list={answers}
                isBtnsDisabled={resultStatus}
                selectedAnswer={selectedAnswer}
                handleSelectedAnswer={handleSelectedAnswer}

@@ -1,11 +1,12 @@
 import cx from 'classnames';
 
 import { ReactComponent as Logo } from 'assets/images/logo.svg';
+import QuestionnaireNavLinks from 'components/features/Questionnaire/NavLinks/NavLinks';
+import QuestionnaireResetBtn from 'components/features/Questionnaire/ResetBtn/ResetBtn';
 import styles from './Header.module.scss';
 
 function Header(props) {
   const {
-    resetQuestionnaire,
     isDarkThemeActive,
     toggleDarkTheme
   } = props;
@@ -21,14 +22,13 @@ function Header(props) {
       <Logo className={styles.logo} />
       Questionnaire
       <div className={styles.controls}>
+        <QuestionnaireNavLinks />
         <button
           type="button"
           className={cx(styles.toggleThemeBtn, {[styles.toggleThemeBtnActive]: isDarkThemeActive})}
           onClick={handleToggleThemeBtnClick}
         />
-        <button type="button" className={styles.resetBtn} onClick={resetQuestionnaire}>
-          Reset
-        </button>
+        <QuestionnaireResetBtn />
       </div>
     </div>
   );
