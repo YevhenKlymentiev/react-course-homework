@@ -1,44 +1,33 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
 import styles from './ManualAnswer.module.scss';
 
-class ManualAnswer extends Component {
-  constructor(props) {
-    super(props);
+function ManualAnswer(props) {
+  const { handleSubmit } = props;
+  const [fieldValue, setFieldValue] = useState('');
 
-    this.state = {
-      fieldValue: ''
-    };
-  }
-
-  handleFormSubmit = (ev) => {
+  function handleFormSubmit(ev) {
     ev.preventDefault();
 
-    this.props.handleSubmit(this.state.fieldValue);
+    handleSubmit(fieldValue);
   }
 
-  handleFieldChange = (ev) => {
+  function handleFieldChange(ev) {
     ev.preventDefault();
 
-    this.setState({ fieldValue: ev.target.value });
+    setFieldValue(ev.target.value);
   }
 
-  render() {
-    const {
-      fieldValue
-    } = this.state;
-
-    return (
-      <form onSubmit={this.handleFormSubmit}>
-        <input type="text"
-               className={styles.field}
-               value={fieldValue}
-               onChange={this.handleFieldChange}
-               placeholder="Type the answer manually"
-        />
-      </form>
-    );
-  }
+  return (
+    <form onSubmit={handleFormSubmit}>
+      <input type="text"
+             className={styles.field}
+             value={fieldValue}
+             onChange={handleFieldChange}
+             placeholder="Type the answer manually"
+      />
+    </form>
+  );
 }
 
 export default ManualAnswer;

@@ -7,7 +7,7 @@ function Answer(props) {
   const {
     data,
     isDisabled,
-    setSelectedAnswer,
+    handleSelectedAnswer,
     isSelected
   } = props;
 
@@ -19,7 +19,7 @@ function Answer(props) {
   function handleBtnClick(ev) {
     ev.preventDefault();
 
-    setSelectedAnswer(data);
+    handleSelectedAnswer(data);
   }
 
   return (
