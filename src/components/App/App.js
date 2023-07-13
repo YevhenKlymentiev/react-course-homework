@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
 import Header from 'components/layouts/Header/Header';
 import Footer from 'components/layouts/Footer/Footer';
@@ -6,45 +6,32 @@ import Questionnaire from 'components/features/Questionnaire/Questionnaire';
 import DarkThemeContext from 'contexts/darkTheme';
 import styles from './App.module.scss';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const [isDarkThemeActive, setIsDarkThemeActive] = useState(false);
+  const [questionnaireResetIndicator, setQuestionnaireResetIndicator] = useState(0);
 
-    this.state = {
-      isDarkThemeActive: false,
-      questionnaireResetIndicator: 0
-    };
+  function toggleDarkTheme() {
+    setIsDarkThemeActive(prevState => !prevState);
   }
 
-  toggleDarkTheme = () => {
-    this.setState(prevState => ({ isDarkThemeActive: !prevState.isDarkThemeActive }));
+  function resetQuestionnaire() {
+    setQuestionnaireResetIndicator(prevState => prevState + 1);
   }
 
-  resetQuestionnaire = () => {
-    this.setState(prevState => ({ questionnaireResetIndicator: prevState.questionnaireResetIndicator + 1 }));
-  }
-
-  render() {
-    const {
-      isDarkThemeActive,
-      questionnaireResetIndicator
-    } = this.state;
-
-    return (
-      <DarkThemeContext.Provider value={isDarkThemeActive}>
-        <div className={styles.container}>
-          <Header resetQuestionnaire={this.resetQuestionnaire}
-                  isDarkThemeActive={isDarkThemeActive}
-                  toggleDarkTheme={this.toggleDarkTheme}
-          />
-          <div className={styles.content}>
-            <Questionnaire resetIndicator={questionnaireResetIndicator} />
-          </div>
-          <Footer />
+  return (
+    <DarkThemeContext.Provider value={isDarkThemeActive}>
+      <div className={styles.container}>
+        <Header resetQuestionnaire={resetQuestionnaire}
+                isDarkThemeActive={isDarkThemeActive}
+                toggleDarkTheme={toggleDarkTheme}
+        />
+        <div className={styles.content}>
+          <Questionnaire resetIndicator={questionnaireResetIndicator} />
         </div>
-      </DarkThemeContext.Provider>
-    );
-  }
+        <Footer />
+      </div>
+    </DarkThemeContext.Provider>
+  );
 }
 
 export default App;

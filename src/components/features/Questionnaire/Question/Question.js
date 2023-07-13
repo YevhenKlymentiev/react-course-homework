@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Answers from './Answers/Answers';
 import ResultMessage from './ResultMessage/ResultMessage';
@@ -6,71 +6,53 @@ import ManualAnswer from './ManualAnswer/ManualAnswer';
 import RESULT_STATUS from 'constants/resultStatus';
 import styles from './Question.module.scss';
 
-class Question extends Component {
-  constructor(props) {
-    super(props);
+function Question(props) {
+  const { data } = props;
+  const availableTimeForAnswer = 10_000;
 
-    this.availableTimeForAnswer = 10_000;
+  const [resultStatus, setResultStatus] = useState(null);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
 
-    this.state = {
-      resultStatus: null,
-      selectedAnswer: null,
-      correctAnswer: props.data.answers.find(curr => curr.correctness)
+  const correctAnswerRef = useRef(data.answers.find(curr => curr.correctness));
+  const answerTimeoutIdRef = useRef(null);
+
+  useEffect(() => {
+    answerTimeoutIdRef.current = setTimeout(() => {
+      setResultStatus(RESULT_STATUS.expired);
+    }, availableTimeForAnswer);
+
+    return () => {
+      clearTimeout(answerTimeoutIdRef.current);
     };
+  }, []);
+
+  function handleSelectedAnswer(answer) {
+    clearTimeout(answerTimeoutIdRef.current);
+
+    setSelectedAnswer(answer);
+    setResultStatus(answer.correctness ? RESULT_STATUS.success : RESULT_STATUS.failure);
   }
 
-  componentDidMount() {
-    this.answerTimeoutId = setTimeout(() => {
-      this.setState({ resultStatus: RESULT_STATUS.expired });
-    }, this.availableTimeForAnswer);
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.answerTimeoutId);
-  }
-
-  setSelectedAnswer = (answer) => {
-    clearTimeout(this.answerTimeoutId);
-
-    this.setState({
-      selectedAnswer: answer,
-      resultStatus: answer.correctness ? RESULT_STATUS.success : RESULT_STATUS.failure
-    });
-  }
-
-  submitManualAnswer = (manualAnswerText) => {
-    const { correctAnswer } = this.state;
-
-    if (manualAnswerText.toLowerCase() === correctAnswer.answerText.toLowerCase()) {
-      this.setSelectedAnswer(correctAnswer);
+  function submitManualAnswer(manualAnswerText) {
+    if (manualAnswerText.toLowerCase() === correctAnswerRef.current.answerText.toLowerCase()) {
+      handleSelectedAnswer(correctAnswerRef.current);
     }
   }
 
-  render() {
-    const {
-      data
-    } = this.props;
-
-    const {
-      resultStatus,
-      selectedAnswer
-    } = this.state;
-
-    return (
-      <div>
-        <h1 className={styles.question}>{ data.questionText }</h1>
-        <Answers list={data.answers}
-                 isBtnsDisabled={resultStatus}
-                 selectedAnswer={selectedAnswer}
-                 setSelectedAnswer={this.setSelectedAnswer}
-        />
-        { resultStatus
-          ? <ResultMessage resultStatus={resultStatus} />
-          : <ManualAnswer handleSubmit={this.submitManualAnswer} />
-        }
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h1 className={styles.question}>{ data.questionText }</h1>
+      <Answers list={data.answers}
+               isBtnsDisabled={resultStatus}
+               selectedAnswer={selectedAnswer}
+               handleSelectedAnswer={handleSelectedAnswer}
+      />
+      { resultStatus
+        ? <ResultMessage resultStatus={resultStatus} />
+        : <ManualAnswer handleSubmit={submitManualAnswer} />
+      }
+    </div>
+  );
 }
 
 export default Question;

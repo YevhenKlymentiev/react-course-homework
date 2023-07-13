@@ -6,7 +6,7 @@ function Answers(props) {
     list,
     isBtnsDisabled,
     selectedAnswer,
-    setSelectedAnswer
+    handleSelectedAnswer
   } = props;
 
   function renderList() {
@@ -14,7 +14,7 @@ function Answers(props) {
       <Answer key={curr.id}
               data={curr}
               isDisabled={isBtnsDisabled}
-              setSelectedAnswer={setSelectedAnswer}
+              handleSelectedAnswer={handleSelectedAnswer}
               isSelected={curr.id === selectedAnswer?.id}
       />
     );
