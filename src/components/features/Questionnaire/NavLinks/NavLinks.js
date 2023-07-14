@@ -1,12 +1,11 @@
-import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import cx from 'classnames';
 
-import DataContext from 'components/features/Questionnaire/DataProvider/data.context';
 import styles from './NavLinks.module.scss';
 
 function NavLinks() {
-  const { questions } = useContext(DataContext);
+  const questions = useSelector(state => state.questionnaire.questions);
 
   if (!questions) return null;
 
