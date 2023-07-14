@@ -5,7 +5,7 @@ import { useOutletContext } from 'react-router-dom';
 import Answers from './Answers/Answers';
 import ResultMessage from './ResultMessage/ResultMessage';
 import ManualAnswer from './ManualAnswer/ManualAnswer';
-import { setQuestionResult } from 'store/modules/questionnaire';
+import { setQuestionResult } from 'store/slices/questionnaire';
 import RESULT_STATUS from 'constants/resultStatus';
 import styles from './Question.module.scss';
 

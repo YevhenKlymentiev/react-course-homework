@@ -5,13 +5,13 @@ import cx from 'classnames';
 import { ReactComponent as Logo } from 'assets/images/logo.svg';
 import QuestionnaireNavLinks from 'components/features/Questionnaire/NavLinks/NavLinks';
 import QuestionnaireResetBtn from 'components/features/Questionnaire/ResetBtn/ResetBtn';
-import { changeTheme } from 'store/modules/theme';
+import { changeTheme } from 'store/slices/theme';
 import THEME from 'constants/theme';
 import styles from './Header.module.scss';
 
 function Header() {
   const dispatch = useDispatch();
-  const theme = useSelector(state => state.theme);
+  const theme = useSelector(state => state.theme.value);
 
   function handleToggleThemeBtnClick(ev) {
     ev.preventDefault();

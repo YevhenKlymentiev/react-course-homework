@@ -1,14 +1,15 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 
-import themeReducer from './modules/theme';
-import questionnaireReducer from './modules/questionnaire';
-import asyncFunctionMiddleware from './middlewares/AsyncFunctionMiddleware';
+import themeReducer from './slices/theme';
+import questionnaireReducer from './slices/questionnaire';
 
 function configureAppStore() {
-  const rootReducer = combineReducers({ questionnaire: questionnaireReducer, theme: themeReducer });
-  const middlewares = applyMiddleware(asyncFunctionMiddleware);
-
-  return createStore(rootReducer, middlewares);
+  return configureStore({
+    reducer: {
+      questionnaire: questionnaireReducer,
+      theme: themeReducer
+    }
+  });
 }
 
 export default configureAppStore;
