@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import cx from 'classnames';
 
 import DarkThemeContext from 'contexts/darkTheme';
@@ -16,6 +17,8 @@ function Answer(props) {
     correctness
   } = data;
 
+  const isDarkThemeActive = useContext(DarkThemeContext);
+
   function handleBtnClick(ev) {
     ev.preventDefault();
 
@@ -23,23 +26,19 @@ function Answer(props) {
   }
 
   return (
-    <DarkThemeContext.Consumer>
-      { isDarkThemeActive => (
-        <button type="button"
-                className={cx(
-                  styles.btn,
-                  { [styles.btnDark]: isDarkThemeActive,
-                    [styles.btnCorrect]: isSelected && correctness,
-                    [styles.btnIncorrect]: isSelected && !correctness
-                  }
-                )}
-                disabled={isDisabled}
-                onClick={handleBtnClick}
-        >
-          { answerText }
-        </button>
-      )}
-    </DarkThemeContext.Consumer>
+    <button type="button"
+            className={cx(
+              styles.btn,
+              { [styles.btnDark]: isDarkThemeActive,
+                [styles.btnCorrect]: isSelected && correctness,
+                [styles.btnIncorrect]: isSelected && !correctness
+              }
+            )}
+            disabled={isDisabled}
+            onClick={handleBtnClick}
+    >
+      { answerText }
+    </button>
   );
 }
 
