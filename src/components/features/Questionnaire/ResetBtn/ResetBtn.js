@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import ASYNC_STATUS from 'constants/asyncStatus';
-import { getQuestionnaireDataAsync } from 'store/modules/questionnaire';
+import { getQuestionsAsync } from 'store/slices/questionnaire';
 import styles from './ResetBtn.module.scss';
 
 function ResetBtn() {
@@ -16,7 +16,7 @@ function ResetBtn() {
 
     if (status === ASYNC_STATUS.loading) return;
 
-    dispatch(getQuestionnaireDataAsync());
+    dispatch(getQuestionsAsync());
     navigate('/');
   }
 

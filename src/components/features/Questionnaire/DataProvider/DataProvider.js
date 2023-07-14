@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { getQuestionnaireDataAsync } from 'store/modules/questionnaire';
+import { getQuestionsAsync } from 'store/slices/questionnaire';
 
 function DataProvider(props) {
   const { children } = props;
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getQuestionnaireDataAsync());
+    dispatch(getQuestionsAsync());
   }, []);
 
   return children;

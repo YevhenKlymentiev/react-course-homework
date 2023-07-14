@@ -17,7 +17,7 @@ function Answer(props) {
     correctness
   } = data;
 
-  const theme = useSelector(state => state.theme);
+  const theme = useSelector(state => state.theme.value);
 
   function handleBtnClick(ev) {
     ev.preventDefault();
