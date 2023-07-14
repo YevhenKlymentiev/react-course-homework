@@ -1,7 +1,7 @@
-import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
-import DarkThemeContext from 'contexts/darkTheme';
+import THEME from 'constants/theme';
 import styles from './Answer.module.scss';
 
 function Answer(props) {
@@ -17,7 +17,7 @@ function Answer(props) {
     correctness
   } = data;
 
-  const isDarkThemeActive = useContext(DarkThemeContext);
+  const theme = useSelector(state => state.theme);
 
   function handleBtnClick(ev) {
     ev.preventDefault();
@@ -29,7 +29,7 @@ function Answer(props) {
     <button type="button"
             className={cx(
               styles.btn,
-              { [styles.btnDark]: isDarkThemeActive,
+              { [styles.btnDark]: theme === THEME.dark,
                 [styles.btnCorrect]: isSelected && correctness,
                 [styles.btnIncorrect]: isSelected && !correctness
               }

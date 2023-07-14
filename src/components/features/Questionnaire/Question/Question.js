@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
 
 import Answers from './Answers/Answers';
 import ResultMessage from './ResultMessage/ResultMessage';
 import ManualAnswer from './ManualAnswer/ManualAnswer';
+import { setQuestionResult } from 'store/modules/questionnaire';
 import RESULT_STATUS from 'constants/resultStatus';
 import styles from './Question.module.scss';
 
@@ -11,11 +13,10 @@ function Question() {
   const nextQuestionDelay = 5_000;
   const availableTimeForAnswer = 10_000;
 
-  const {
-    questionData: { id, answers, questionText, resultStatus, selectedAnswer },
-    setQuestionResult,
-    navToNextQuestion
-  } = useOutletContext();
+  const dispatch = useDispatch();
+
+  const { questionData, navToNextQuestion } = useOutletContext();
+  const { id, answers, questionText, resultStatus, selectedAnswer } = questionData;
 
   const correctAnswerRef = useRef(answers.find(curr => curr.correctness));
   const nextQuestionTimeoutIdRef = useRef(null);
@@ -28,7 +29,7 @@ function Question() {
   useEffect(() => {
     if (!resultStatus) {
       answerTimeoutIdRef.current = setTimeout(() => {
-        setQuestionResult({ id, resultStatus: RESULT_STATUS.expired });
+        dispatch(setQuestionResult({ id, resultStatus: RESULT_STATUS.expired }));
         navToNextQuestionWithDelay();
       }, availableTimeForAnswer);
     }
@@ -43,7 +44,7 @@ function Question() {
     const resultStatus = selectedAnswer.correctness ? RESULT_STATUS.success : RESULT_STATUS.failure;
 
     clearTimeout(answerTimeoutIdRef.current);
-    setQuestionResult({ id, resultStatus, selectedAnswer });
+    dispatch(setQuestionResult({ id, resultStatus, selectedAnswer }));
     navToNextQuestionWithDelay();
   }
 
